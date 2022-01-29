@@ -8,8 +8,9 @@ $ID = $_POST["id"];
 
 $sql = "SELECT id, user_name, last_name email FROM users id = ";
 
-if (!($result = $mysqli->query($sql)))
+if (!($result = $mysqli->query($sql))) {
     showerror($mysqli->errno, $mysqli->error);
+}
 
 $row = $result->fetch_assoc();
 

@@ -2,7 +2,7 @@
 include "connect.php";
 
 session_start();
-echo "Session ID: " . session_id() . "<br>";
+// echo "Session ID: " . session_id() . "<br>";
 
 $username = $_POST["username"];
 $firstname = $_POST["firstname"];
@@ -29,12 +29,19 @@ if ($result->num_rows > 0) {
     // Tell the user that the name is already taken.
     echo "Username is already taken!";
 } else {
-    echo "Creating new User...";
-    // Insert new user into the database.
 
+    // Insert new user into the database.
     $sql = "INSERT INTO users (id, user_name, first_name, last_name, email, password, registrationdate) VALUES (NULL, '$username', '$firstname', '$lastname', '$email', '$password', CURRENT_TIMESTAMP())";
     if ($mysqli->query($sql) === true) {
-        echo "New user create successfully!";
+        $sql = "SELECT id FROM users WHERE user_name = '$username'";
+
+        if (!($result = $mysqli->query($sql))) {
+            showerror($mysqli->errno, $mysqli->error);
+        }
+
+        while ($row = $result->fetch_assoc()) {
+            echo $row["id"];
+        }
     } else {
         showerror($mysqli->errno, $mysqli->error);
     }
